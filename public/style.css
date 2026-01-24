@@ -1,0 +1,48 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+div:hover {
+  cursor: pointer;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(8, 10vh);
+  grid-template-rows: repeat(8, 10vh);
+  width: 80vh;
+  height: 80vh;
+}
+
+.white {
+  background-color: #ebecd0;
+}
+
+.black {
+  background-color: #779556;
+}
+
+.piece {
+  width: 95%;
+  height: 95%;
+  object-fit: contain;
+  display: block;
+}
+
+.clickable {
+  width: 10vh;
+  height: 10vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
