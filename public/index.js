@@ -1,4 +1,4 @@
-// ==========Board Var Config==========
+// ==========Board Global Config==========
 
 const chessBoard = document.querySelector(".board");
 const chessLetter = ["a", "b", "c", "d", "e", "f", "g", "h"];
@@ -61,13 +61,18 @@ function initBoard() {
 function initPieces() {
   for (let piece in Board) {
     let indexOfpiece = document.querySelector("#" + piece);
-    pieceImg = document.createElement("img");
+    let pieceImg = document.createElement("img");
     pieceImg.src =
       "assets/" + Board[piece].color + "_" + Board[piece].type + ".png";
     pieceImg.classList.add("piece");
+    pieceImg.setAttribute("draggable", true);
     indexOfpiece.appendChild(pieceImg);
   }
 }
+
+// ==========Drag & Drop==========
+
+
 
 initBoard();
 initPieces();
