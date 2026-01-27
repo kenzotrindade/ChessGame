@@ -61,13 +61,41 @@ function initBoard() {
 function initPieces() {
   for (let piece in Board) {
     let indexOfpiece = document.querySelector("#" + piece);
-    pieceImg = document.createElement("img");
+    let pieceImg = document.createElement("img");
     pieceImg.src =
       "assets/" + Board[piece].color + "_" + Board[piece].type + ".png";
     pieceImg.classList.add("piece");
+    pieceImg.draggable = true;
     indexOfpiece.appendChild(pieceImg);
   }
 }
 
+function dragAndDrop() {
+  const listPieces = document.querySelectorAll(".piece");
+  const listCases = document.querySelectorAll(".clickable");
+
+  listPieces.forEach((piece) => {
+    piece.addEventListener("dragstart", (e) => {
+      let idParent = e.target.parentElement.id;
+      e.dataTransfer.setData("text", idParent);
+    });
+  });
+
+  listCases.forEach((cases) => {
+    cases.addEventListener("dragover", (e) => {
+      e.preventDefault();
+    });
+
+    cases.addEventListener("drop", (e) => {
+      const data = e.dataTransfer.getData("text");
+      const startCase = document.getElementById(data);
+
+      const moovePiece = startCase.querySelector(".piece");
+      e.currentTarget.appendChild(moovePiece);
+    });
+  });
+}
+
 initBoard();
 initPieces();
+dragAndDrop();
