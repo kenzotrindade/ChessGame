@@ -91,6 +91,10 @@ function dragAndDrop() {
       const startCase = document.getElementById(data);
 
       const moovePiece = startCase.querySelector(".piece");
+      const pieceHere = e.currentTarget.querySelector(".piece");
+      if (pieceHere) {
+        pieceHere.remove();
+      }
       e.currentTarget.appendChild(moovePiece);
     });
   });
