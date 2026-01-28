@@ -99,6 +99,8 @@ function dragAndDrop() {
         if (pieceHere) {
           pieceHere.remove();
         }
+        Board[e.currentTarget.id] = Board[data];
+        delete Board[data];
         e.currentTarget.appendChild(moovePiece);
       }
     });
@@ -108,8 +110,8 @@ function dragAndDrop() {
 // ==========Calculate Coords==========
 
 function idToCoords(id) {
-  const x = chessLetter.indexOf(id[0]) + 1;
-  const y = parseInt(id[1]);
+  const x = parseInt(id[1]);
+  const y = chessLetter.indexOf(id[0]) + 1;
 
   return { x, y };
 }
@@ -117,11 +119,80 @@ function idToCoords(id) {
 // ==========Global Rules==========
 
 function isLegalMoove(idStart, idEnd) {
+  const startPiece = Board[idStart];
+  const endPiece = Board[idEnd];
+
   if (idStart === idEnd) {
     return false;
   }
 
+  if (endPiece && startPiece.color === endPiece.color) {
+    return false;
+  }
+
+  if (startPiece.type === "pawn") {
+    return pawnLegalMoove(idStart, idEnd);
+  }
+
+  if (startPiece.type === "rook") {
+    return rookLegalMoove(idStart, idEnd);
+  }
+
   return true;
+}
+
+function pawnLegalMoove(idStart, idEnd) {
+  const startPiece = Board[idStart];
+  const endPiece = Board[idEnd];
+
+  const start = idToCoords(idStart);
+  const end = idToCoords(idEnd);
+
+  const pieceHere = Board[idEnd];
+
+  let mooveWhiteLimit = 1;
+  let mooveBlackLimit = -1;
+
+  if (start.y !== end.y) {
+    return false;
+  } else {
+    if (pieceHere) {
+      return false;
+    }
+  }
+
+  if (startPiece.color === "white" && start.x === 2) {
+    mooveWhiteLimit = 2;
+  }
+
+  if (startPiece.color === "black" && start.x === 7) {
+    mooveBlackLimit = -2;
+  }
+
+  if (
+    (startPiece.color === "white" && end.x - start.x > mooveWhiteLimit) ||
+    (startPiece.color === "white" && end.x - start.x < 0)
+  ) {
+    return false;
+  } else if (
+    (startPiece.color === "black" && end.x - start.x < mooveBlackLimit) ||
+    (startPiece.color === "black" && end.x - start.x > 0)
+  ) {
+    return false;
+  }
+
+  return true;
+}
+
+function rookLegalMoove(idStart, idEnd) {
+  const start = idToCoords(idStart);
+  const end = idToCoords(idEnd);
+
+  if (start.x === end.x || start.y === end.y) {
+    return true;
+  }
+
+  return false;
 }
 
 initBoard();
