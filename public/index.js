@@ -72,7 +72,58 @@ function initPieces() {
 
 // ==========Drag & Drop==========
 
+function dragAndDrop() {
+  const listPieces = document.querySelectorAll(".piece");
+  const listCases = document.querySelectorAll(".clickable");
 
+  listPieces.forEach((piece) => {
+    piece.addEventListener("dragstart", (e) => {
+      let idParent = e.target.parentElement.id;
+      e.dataTransfer.setData("text", idParent);
+    });
+  });
+
+  listCases.forEach((cases) => {
+    cases.addEventListener("dragover", (e) => {
+      e.preventDefault();
+    });
+
+    cases.addEventListener("drop", (e) => {
+      const data = e.dataTransfer.getData("text");
+      const startCase = document.getElementById(data);
+
+      const moovePiece = startCase.querySelector(".piece");
+      const pieceHere = e.currentTarget.querySelector(".piece");
+      const legalMoove = isLegalMoove(data, e.currentTarget.id);
+      if (legalMoove) {
+        if (pieceHere) {
+          pieceHere.remove();
+        }
+        e.currentTarget.appendChild(moovePiece);
+      }
+    });
+  });
+}
+
+// ==========Calculate Coords==========
+
+function idToCoords(id) {
+  const x = chessLetter.indexOf(id[0]) + 1;
+  const y = parseInt(id[1]);
+
+  return { x, y };
+}
+
+// ==========Global Rules==========
+
+function isLegalMoove(idStart, idEnd) {
+  if (idStart === idEnd) {
+    return false;
+  }
+
+  return true;
+}
 
 initBoard();
 initPieces();
+dragAndDrop();
