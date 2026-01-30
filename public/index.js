@@ -169,6 +169,15 @@ function pawnLegalMoove(idStart, idEnd) {
   let mooveWhiteLimit = 1;
   let mooveBlackLimit = -1;
 
+  console.log(start, end);
+
+  if (start.y !== end.y && !pieceHere) {
+    return false;
+  } else if (pieceHere && (end.y === start.y || start.x === end.x)) {
+    return false;
+  } else if (end.y - start.y > 1 || start.y - end.y > 1) {
+    return false;
+  }
   if (startPiece.color === "white" && start.x === 2) {
     mooveWhiteLimit = 2;
   }
