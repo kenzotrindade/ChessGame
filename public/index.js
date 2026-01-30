@@ -138,6 +138,14 @@ function isLegalMoove(idStart, idEnd) {
     return rookLegalMoove(idStart, idEnd);
   }
 
+  if (startPiece.type === "bishop") {
+    return bishopLegalMoove(idStart, idEnd);
+  }
+
+  if (startPiece.type === "knight") {
+    return knightLegalMoove(idStart, idEnd);
+  }
+
   return true;
 }
 
@@ -189,6 +197,31 @@ function rookLegalMoove(idStart, idEnd) {
   const end = idToCoords(idEnd);
 
   if (start.x === end.x || start.y === end.y) {
+    return true;
+  }
+
+  return false;
+}
+
+function bishopLegalMoove(idStart, idEnd) {
+  const start = idToCoords(idStart);
+  const end = idToCoords(idEnd);
+
+  if (Math.abs(end.x - start.x) === Math.abs(end.y - start.y)) {
+    return true;
+  }
+
+  return false;
+}
+
+function knightLegalMoove(idStart, idEnd) {
+  const start = idToCoords(idStart);
+  const end = idToCoords(idEnd);
+
+  if (
+    (Math.abs(end.x - start.x) === 2 && Math.abs(end.y - start.y) === 1) ||
+    (Math.abs(end.x - start.x) === 1 && Math.abs(end.y - start.y) === 2)
+  ) {
     return true;
   }
 
