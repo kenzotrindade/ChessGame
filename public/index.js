@@ -146,6 +146,14 @@ function isLegalMoove(idStart, idEnd) {
     return knightLegalMoove(idStart, idEnd);
   }
 
+  if (startPiece.type === "queen") {
+    return queenLegalMoove(idStart, idEnd);
+  }
+
+  if (startPiece.type === "king") {
+    return kingLegalMoove(idStart, idEnd);
+  }
+
   return true;
 }
 
@@ -160,14 +168,6 @@ function pawnLegalMoove(idStart, idEnd) {
 
   let mooveWhiteLimit = 1;
   let mooveBlackLimit = -1;
-
-  if (start.y !== end.y) {
-    return false;
-  } else {
-    if (pieceHere) {
-      return false;
-    }
-  }
 
   if (startPiece.color === "white" && start.x === 2) {
     mooveWhiteLimit = 2;
@@ -222,6 +222,45 @@ function knightLegalMoove(idStart, idEnd) {
     (Math.abs(end.x - start.x) === 2 && Math.abs(end.y - start.y) === 1) ||
     (Math.abs(end.x - start.x) === 1 && Math.abs(end.y - start.y) === 2)
   ) {
+    return true;
+  }
+
+  return false;
+}
+
+function queenLegalMoove(idStart, idEnd) {
+  const start = idToCoords(idStart);
+  const end = idToCoords(idEnd);
+
+  if (Math.abs(end.x - start.x) === Math.abs(end.y - start.y)) {
+    return true;
+  }
+
+  if (start.x === end.x || start.y === end.y) {
+    return true;
+  }
+
+  return false;
+}
+
+function kingLegalMoove(idStart, idEnd) {
+  const start = idToCoords(idStart);
+  const end = idToCoords(idEnd);
+
+  let mooveLimit = 1;
+
+  if (
+    Math.abs(end.x - start.x) > mooveLimit ||
+    Math.abs(end.y - start.y) > mooveLimit
+  ) {
+    return false;
+  }
+
+  if (Math.abs(end.x - start.x) === Math.abs(end.y - start.y)) {
+    return true;
+  }
+
+  if (start.x === end.x || start.y === end.y) {
     return true;
   }
 
