@@ -38,6 +38,17 @@ const Board = {
   h2: { type: "pawn", color: "white" },
 };
 
+const pawnChoice = [
+  { type: "rook", color: "white" },
+  { type: "knight", color: "white" },
+  { type: "bishop", color: "white" },
+  { type: "queen", color: "white" },
+  { type: "rook", color: "black" },
+  { type: "knight", color: "black" },
+  { type: "bishop", color: "black" },
+  { type: "queen", color: "black" },
+];
+
 // ==========Board Creation==========
 
 function initBoard() {
@@ -53,6 +64,21 @@ function initBoard() {
       boardCase.classList.add("clickable");
       chessBoard.appendChild(boardCase);
     }
+  }
+
+  for (let index in pawnChoice) {
+    let pieceChoiceImg = document.createElement("img");
+    pieceChoiceImg.src =
+      `assets/${pawnChoice[index].color}_` + `${pawnChoice[index].type}.png`;
+    pieceChoiceImg.className = "pieceChoices";
+    pieceChoiceImg.id = `${pawnChoice[index].color}_${pawnChoice[index].type}`;
+    document
+      .querySelector(`#pawnChoice${pawnChoice[index].color}`)
+      .appendChild(pieceChoiceImg);
+    pieceChoiceImg.addEventListener("click", () => {
+      let [color, type] = pieceChoiceImg.id.split("_");
+      console.log(color, type);
+    });
   }
 }
 
@@ -174,7 +200,13 @@ function pawnLegalMoove(idStart, idEnd) {
 
   if (start.y !== end.y && !pieceHere) {
     return false;
-  } else if (pieceHere && (end.y === start.y || start.x === end.x)) {
+  } else if (
+    pieceHere &&
+    (end.y === start.y ||
+      start.x === end.x ||
+      end.x - start.x > 1 ||
+      start.x - end.x > 1)
+  ) {
     return false;
   } else if (end.y - start.y > 1 || start.y - end.y > 1) {
     return false;
@@ -197,6 +229,13 @@ function pawnLegalMoove(idStart, idEnd) {
     (startPiece.color === "black" && end.x - start.x > 0)
   ) {
     return false;
+  }
+
+  if (end.x === 8 || end.x === 1) {
+    const colorChoice = document.querySelector(
+      `#pawnChoice${startPiece.color}`,
+    );
+    colorChoice.style.display = "grid";
   }
 
   return true;

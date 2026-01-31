@@ -22,6 +22,28 @@ div:hover {
   grid-template-rows: repeat(8, 10vh);
   width: 80vh;
   height: 80vh;
+  position: relative;
+}
+
+.pawnChoice {
+  position: absolute;
+  grid-template-columns: repeat(4, 1fr);
+  column-gap: 10px;
+  top: 20%;
+  right: 31.855px;
+  display: none;
+}
+
+.pawnChoice img {
+  border: 3px solid black;
+}
+
+#pawnChoicewhite img {
+  background-color: #779556;
+}
+
+#pawnChoiceblack img {
+  background-color: #ebecd0;
 }
 
 .white {
