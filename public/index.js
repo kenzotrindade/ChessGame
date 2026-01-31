@@ -118,6 +118,8 @@ function idToCoords(id) {
 
 // ==========Global Rules==========
 
+const isCheck = false;
+
 function isLegalMoove(idStart, idEnd) {
   const startPiece = Board[idStart];
   const endPiece = Board[idEnd];
@@ -159,7 +161,6 @@ function isLegalMoove(idStart, idEnd) {
 
 function pawnLegalMoove(idStart, idEnd) {
   const startPiece = Board[idStart];
-  const endPiece = Board[idEnd];
 
   const start = idToCoords(idStart);
   const end = idToCoords(idEnd);
@@ -255,8 +256,11 @@ function queenLegalMoove(idStart, idEnd) {
 function kingLegalMoove(idStart, idEnd) {
   const start = idToCoords(idStart);
   const end = idToCoords(idEnd);
+  const mooveLimit = 1;
 
-  let mooveLimit = 1;
+  if (isCheck) {
+    return false;
+  }
 
   if (
     Math.abs(end.x - start.x) > mooveLimit ||
