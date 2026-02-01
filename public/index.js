@@ -121,7 +121,8 @@ function dragAndDrop() {
       const moovePiece = startCase.querySelector(".piece");
       const pieceHere = e.currentTarget.querySelector(".piece");
       const legalMoove = isLegalMoove(data, e.currentTarget.id);
-      if (legalMoove) {
+      const causesCheck = inCheck(data, e.currentTarget.id);
+      if (legalMoove && !causesCheck) {
         if (pieceHere) {
           pieceHere.remove();
         }
@@ -142,9 +143,11 @@ function idToCoords(id) {
   return { x, y };
 }
 
-// ==========Global Rules==========
+function coordsToId(x, y) {
+  return chessLetter[y - 1] + x;
+}
 
-const isCheck = false;
+// ==========Global Rules==========
 
 function isLegalMoove(idStart, idEnd) {
   const startPiece = Board[idStart];
@@ -297,10 +300,6 @@ function kingLegalMoove(idStart, idEnd) {
   const end = idToCoords(idEnd);
   const mooveLimit = 1;
 
-  if (isCheck) {
-    return false;
-  }
-
   if (
     Math.abs(end.x - start.x) > mooveLimit ||
     Math.abs(end.y - start.y) > mooveLimit
@@ -317,6 +316,125 @@ function kingLegalMoove(idStart, idEnd) {
   }
 
   return false;
+}
+
+function isSquareAttacked(idSquare, ennemyColor) {
+  const squarePosition = idToCoords(idSquare);
+  const pawnDirection = ennemyColor === "white" ? -1 : 1;
+  const pawnMoves = [
+    [pawnDirection, 1],
+    [pawnDirection, -1],
+  ];
+  const directions = [
+    [0, 1],
+    [0, -1],
+    [1, 0],
+    [-1, 0],
+    [1, 1],
+    [1, -1],
+    [-1, 1],
+    [-1, -1],
+  ];
+  const knightMoves = [
+    [2, 1],
+    [2, -1],
+    [-2, 1],
+    [-2, -1],
+    [1, 2],
+    [1, -2],
+    [-1, 2],
+    [-1, -2],
+  ];
+
+  for (let k of knightMoves) {
+    let kx = squarePosition.x + k[0];
+    let ky = squarePosition.y + k[1];
+
+    if (kx >= 1 && kx <= 8 && ky >= 1 && ky <= 8) {
+      let targetId = coordsToId(kx, ky);
+      let piece = Board[targetId];
+
+      if (piece && piece.color === ennemyColor && piece.type === "knight") {
+        return true;
+      }
+    }
+  }
+
+  for (let p of pawnMoves) {
+    let px = squarePosition.x + p[0];
+    let py = squarePosition.y + p[1];
+    if (px >= 1 && px <= 8 && py >= 1 && py <= 8) {
+      let targetId = coordsToId(px, py);
+      let piece = Board[targetId];
+      if (piece && piece.color === ennemyColor && piece.type === "pawn") {
+        return true;
+      }
+    }
+  }
+
+  for (let d of directions) {
+    let checkX = squarePosition.x + d[0];
+    let checkY = squarePosition.y + d[1];
+
+    while (checkX >= 1 && checkX <= 8 && checkY >= 1 && checkY <= 8) {
+      let targetId = coordsToId(checkX, checkY);
+      let piece = Board[targetId];
+
+      if (piece) {
+        if (piece.color === ennemyColor) {
+          if (piece.type === "queen") {
+            return true;
+          }
+
+          if ((d[0] === 0 || d[1] === 0) && piece.type === "rook") {
+            return true;
+          }
+
+          if (d[0] !== 0 && d[1] !== 0 && piece.type === "bishop") {
+            return true;
+          }
+        }
+        break;
+      }
+      checkX += d[0];
+      checkY += d[1];
+    }
+  }
+
+  return false;
+}
+
+function inCheck(idStart, idEnd) {
+  const start = Board[idStart];
+  const end = Board[idEnd];
+  const myColor = start.color;
+  const ennemyColor = myColor === "white" ? "black" : "white";
+
+  if (!start) {
+    return false;
+  }
+
+  Board[idEnd] = start;
+  delete Board[idStart];
+
+  let kingId = "";
+  for (let id in Board) {
+    if (Board[id].type === "king" && Board[id].color === myColor) {
+      kingId = id;
+      break;
+    }
+  }
+
+  const isInCheck = isSquareAttacked(kingId, ennemyColor);
+
+  Board[idStart] = start;
+  if (end) {
+    Board[idEnd] = end;
+  } else {
+    delete Board[idEnd];
+  }
+
+  return isInCheck;
 }
 
 initBoard();
