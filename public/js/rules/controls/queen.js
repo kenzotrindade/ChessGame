@@ -1,4 +1,6 @@
-export function queenLegalMoove(idStart, idEnd) {
+import { idToCoords } from "../../components/calcCoords.js";
+
+export function queenLegalMoove(idStart, idEnd, board) {
   const start = idToCoords(idStart);
   const end = idToCoords(idEnd);
 

@@ -1,10 +1,12 @@
-export function pawnLegalMoove(idStart, idEnd) {
-  const startPiece = Board[idStart];
+import { idToCoords } from "../../components/calcCoords.js";
+
+export function pawnLegalMoove(idStart, idEnd, board) {
+  const startPiece = board[idStart];
 
   const start = idToCoords(idStart);
   const end = idToCoords(idEnd);
 
-  const pieceHere = Board[idEnd];
+  const pieceHere = board[idEnd];
 
   let mooveWhiteLimit = 1;
   let mooveBlackLimit = -1;
@@ -12,7 +14,7 @@ export function pawnLegalMoove(idStart, idEnd) {
   /*for (let i = start.x + 1; i < end.x; i++) {
     let id = chessLetter[7 - end.y] + i;
     console.log(id);
-    const checkPieceBetween = Board[id];
+    const checkPieceBetween = board[id];
     console.log(checkPieceBetween);
     if (checkPieceBetween) return false;
   }*/

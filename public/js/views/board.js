@@ -1,7 +1,8 @@
+import { dragAndDrop } from "../components/dragAndDrop.js";
+
 export default class BoardManager {
-  constructor() {
+  constructor(rules) {
     this.chessBoard = document.querySelector(".board");
-    this.chessLetter = ["a", "b", "c", "d", "e", "f", "g", "h"];
 
     this.grid = {
       a8: { type: "rook", color: "black" },
@@ -49,6 +50,12 @@ export default class BoardManager {
       { type: "bishop", color: "black" },
       { type: "queen", color: "black" },
     ];
+
+    this.rules = rules;
+
+    this.initBoard(rules);
+    this.initPieces();
+    dragAndDrop(this.grid, this.rules);
   }
 
   initBoard(rules) {
@@ -59,7 +66,7 @@ export default class BoardManager {
         const isWhite = (i + j) % 2 === 0;
         boardCase.classList.add(isWhite ? "white" : "black");
 
-        boardCase.id = this.chessLetter[j] + (8 - i);
+        boardCase.id = this.rules.chessLetter[j] + (8 - i);
         boardCase.classList.add("clickable");
         this.chessBoard.appendChild(boardCase);
       }
@@ -89,18 +96,16 @@ export default class BoardManager {
       pieceChoiceImg.id = `${choice.color}_${choice.type}`;
 
       const container = document.querySelector(`#pawnChoice${choice.color}`);
-      if (container) {
-        container.appendChild(pieceChoiceImg);
+      container.appendChild(pieceChoiceImg);
 
-        pieceChoiceImg.addEventListener("click", () => {
-          const { end } = rules.piecePlayed;
-          this.grid[end].type = choice.type;
+      pieceChoiceImg.addEventListener("click", () => {
+        const { end } = rules.piecePlayed;
+        this.grid[end].type = choice.type;
 
-          const indexOfpiece = document.getElementById(end);
-          indexOfpiece.querySelector("img").src = pieceChoiceImg.src;
-          container.style.display = "none";
-        });
-      }
+        const indexOfpiece = document.getElementById(end);
+        indexOfpiece.querySelector("img").src = pieceChoiceImg.src;
+        container.style.display = "none";
+      });
     });
   }
 }

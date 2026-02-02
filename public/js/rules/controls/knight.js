@@ -1,4 +1,6 @@
-export function knightLegalMoove(idStart, idEnd) {
+import { idToCoords } from "../../components/calcCoords.js";
+
+export function knightLegalMoove(idStart, idEnd, board) {
   const start = idToCoords(idStart);
   const end = idToCoords(idEnd);
 
