@@ -1,9 +1,4 @@
-import { idToCoords } from "../../components/calcCoords.js";
-
-export function rookLegalMoove(idStart, idEnd, board) {
-  const start = idToCoords(idStart);
-  const end = idToCoords(idEnd);
-
+export function rookLegalMoove(start, end) {
   if (start.x === end.x || start.y === end.y) {
     return true;
   }

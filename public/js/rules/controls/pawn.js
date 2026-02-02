@@ -1,10 +1,5 @@
-import { idToCoords } from "../../components/calcCoords.js";
-
-export function pawnLegalMoove(idStart, idEnd, board) {
+export function pawnLegalMoove(idStart, idEnd, start, end, board) {
   const startPiece = board[idStart];
-
-  const start = idToCoords(idStart);
-  const end = idToCoords(idEnd);
 
   const pieceHere = board[idEnd];
 

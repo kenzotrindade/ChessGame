@@ -33,28 +33,31 @@ export default class GlobalRules {
       return false;
     }
 
+    const start = idToCoords(idStart, this.chessLetter);
+    const end = idToCoords(idEnd, this.chessLetter);
+
     if (startPiece.type === "pawn") {
-      return pawnLegalMoove(idStart, idEnd, board);
+      return pawnLegalMoove(idStart, idEnd, start, end, board);
     }
 
     if (startPiece.type === "rook") {
-      return rookLegalMoove(idStart, idEnd, board);
+      return rookLegalMoove(start, end);
     }
 
     if (startPiece.type === "bishop") {
-      return bishopLegalMoove(idStart, idEnd, board);
+      return bishopLegalMoove(start, end, board);
     }
 
     if (startPiece.type === "knight") {
-      return knightLegalMoove(idStart, idEnd, board);
+      return knightLegalMoove(start, end);
     }
 
     if (startPiece.type === "queen") {
-      return queenLegalMoove(idStart, idEnd, board);
+      return queenLegalMoove(start, end);
     }
 
     if (startPiece.type === "king") {
-      return kingLegalMoove(idStart, idEnd, board);
+      return kingLegalMoove(start, end);
     }
 
     return true;

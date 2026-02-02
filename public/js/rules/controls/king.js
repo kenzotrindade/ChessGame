@@ -1,8 +1,4 @@
-import { idToCoords } from "../../components/calcCoords.js";
-
-export function kingLegalMoove(idStart, idEnd, board) {
-  const start = idToCoords(idStart);
-  const end = idToCoords(idEnd);
+export function kingLegalMoove(start, end) {
   const mooveLimit = 1;
 
   if (
