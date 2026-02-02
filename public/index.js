@@ -455,7 +455,7 @@ function inCheck(idStart, idEnd) {
   return isInCheck;
 }
 
-function pathclear(startId, endId) {
+function pathClear(startId, endId) {
   const start = idToCoords(startId);
   const end = idToCoords(endId);
 }
