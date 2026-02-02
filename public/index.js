@@ -38,7 +38,7 @@ const Board = {
   h2: { type: "pawn", color: "white" },
 };
 
-const pawnChoice = [
+const pawnChoices = [
   { type: "rook", color: "white" },
   { type: "knight", color: "white" },
   { type: "bishop", color: "white" },
@@ -48,6 +48,8 @@ const pawnChoice = [
   { type: "bishop", color: "black" },
   { type: "queen", color: "black" },
 ];
+
+let piecePlayed = {};
 
 // ==========Board Creation==========
 
@@ -66,18 +68,22 @@ function initBoard() {
     }
   }
 
-  for (let index in pawnChoice) {
+  for (let index in pawnChoices) {
     let pieceChoiceImg = document.createElement("img");
     pieceChoiceImg.src =
-      `assets/${pawnChoice[index].color}_` + `${pawnChoice[index].type}.png`;
+      `assets/${pawnChoices[index].color}_` + `${pawnChoices[index].type}.png`;
     pieceChoiceImg.className = "pieceChoices";
-    pieceChoiceImg.id = `${pawnChoice[index].color}_${pawnChoice[index].type}`;
+    pieceChoiceImg.id = `${pawnChoices[index].color}_${pawnChoices[index].type}`;
     document
-      .querySelector(`#pawnChoice${pawnChoice[index].color}`)
+      .querySelector(`#pawnChoice${pawnChoices[index].color}`)
       .appendChild(pieceChoiceImg);
     pieceChoiceImg.addEventListener("click", () => {
       let [color, type] = pieceChoiceImg.id.split("_");
-      console.log(color, type);
+      Board[piecePlayed.end].type = type;
+
+      let indexOfpiece = document.querySelector("#" + piecePlayed.end);
+      indexOfpiece.querySelector("img").src = `assets/${color}_${type}.png`;
+      document.querySelector(`#pawnChoice${color}`).style.display = "none";
     });
   }
 }
@@ -117,7 +123,6 @@ function dragAndDrop() {
     cases.addEventListener("drop", (e) => {
       const data = e.dataTransfer.getData("text");
       const startCase = document.getElementById(data);
-
       const moovePiece = startCase.querySelector(".piece");
       const pieceHere = e.currentTarget.querySelector(".piece");
       const legalMoove = isLegalMoove(data, e.currentTarget.id);
@@ -152,6 +157,13 @@ function coordsToId(x, y) {
 function isLegalMoove(idStart, idEnd) {
   const startPiece = Board[idStart];
   const endPiece = Board[idEnd];
+
+  piecePlayed = {
+    start: idStart,
+    end: idEnd,
+    color: Board[idStart].color,
+    type: Board[idStart].type,
+  };
 
   if (idStart === idEnd) {
     return false;
@@ -199,7 +211,13 @@ function pawnLegalMoove(idStart, idEnd) {
   let mooveWhiteLimit = 1;
   let mooveBlackLimit = -1;
 
-  console.log(start, end);
+  /*for (let i = start.x + 1; i < end.x; i++) {
+    let id = chessLetter[7 - end.y] + i;
+    console.log(id);
+    const checkPieceBetween = Board[id];
+    console.log(checkPieceBetween);
+    if (checkPieceBetween) return false;
+  }*/
 
   if (start.y !== end.y && !pieceHere) {
     return false;
@@ -435,6 +453,11 @@ function inCheck(idStart, idEnd) {
   }
 
   return isInCheck;
+}
+
+function pathclear(startId, endId) {
+  const start = idToCoords(startId);
+  const end = idToCoords(endId);
 }
 
 initBoard();
