@@ -7,6 +7,8 @@ import { kingLegalMoove } from "./controls/king.js";
 
 import { idToCoords } from "../components/calcCoords.js";
 
+import PathClear from "./pathClear.js";
+
 export default class GlobalRules {
   constructor() {
     this.piecePlayed = {};
@@ -34,30 +36,52 @@ export default class GlobalRules {
 
     const start = idToCoords(idStart, this.chessLetter);
     const end = idToCoords(idEnd, this.chessLetter);
+    /*console.log(
+      "test\n\n",
+      idStart,
+      idEnd,
+      "\n",
+      startPiece,
+      "\n",
+      endPiece,
+      "\n",
+      start,
+      end,
+    );*/
 
-    if (startPiece.type === "pawn") {
-      return pawnLegalMoove(idStart, idEnd, start, end, board);
-    }
+    const pathClear = new PathClear(
+      idStart,
+      start,
+      end,
+      this.chessLetter,
+      board,
+    );
 
-    if (startPiece.type === "rook") {
-      return rookLegalMoove(start, end);
-    }
+    if (pathClear.check) {
+      if (startPiece.type === "pawn") {
+        return pawnLegalMoove(idStart, idEnd, start, end, board);
+      }
 
-    if (startPiece.type === "bishop") {
-      return bishopLegalMoove(start, end, board);
-    }
+      if (startPiece.type === "rook") {
+        return rookLegalMoove(start, end);
+      }
 
-    if (startPiece.type === "knight") {
-      return knightLegalMoove(start, end);
-    }
+      if (startPiece.type === "bishop") {
+        return bishopLegalMoove(start, end, board);
+      }
 
-    if (startPiece.type === "queen") {
-      return queenLegalMoove(start, end);
-    }
+      if (startPiece.type === "knight") {
+        return knightLegalMoove(start, end);
+      }
 
-    if (startPiece.type === "king") {
-      return kingLegalMoove(start, end);
-    }
+      if (startPiece.type === "queen") {
+        return queenLegalMoove(start, end);
+      }
+
+      if (startPiece.type === "king") {
+        return kingLegalMoove(start, end);
+      }
+    } else return false;
 
     return true;
   }
