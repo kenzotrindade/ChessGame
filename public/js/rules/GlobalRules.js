@@ -51,6 +51,7 @@ export default class GlobalRules {
 
     const pathClear = new PathClear(
       idStart,
+      idEnd,
       start,
       end,
       this.chessLetter,

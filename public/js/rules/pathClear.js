@@ -1,8 +1,9 @@
 import { coordsToId } from "../components/calcCoords.js";
 
 export default class PathClear {
-  constructor(idStart, start, end, chessLetter, board) {
+  constructor(idStart, idEnd, start, end, chessLetter, board) {
     this.idStart = idStart;
+    this.idEnd = idEnd;
     this.checkX = start.x - end.x;
     this.checkY = start.y - end.y;
     this.idTab = chessLetter;
@@ -38,10 +39,7 @@ export default class PathClear {
       }
     }
 
-    if (
-      this.board[this.idStart].type != "knight" &&
-      this.board[this.idStart].type != "pawn"
-    ) {
+    if (this.board[this.idStart].type != "knight") {
       if (this.checkX < 0 && this.checkY < 0) {
         this.checkDiag(this.direction[0]);
       } else if (this.checkX < 0 && this.checkY > 0) {
@@ -72,8 +70,9 @@ export default class PathClear {
     while (currentX != this.end.x && currentY != this.end.y) {
       currentX += dir[0];
       currentY += dir[1];
+      console.log(currentX, currentY);
       let id = coordsToId(currentX, currentY, this.idTab);
-      if (this.board[id]) this.check = false;
+      if (this.board[id] && id != this.idEnd) this.check = false;
     }
   }
 }
