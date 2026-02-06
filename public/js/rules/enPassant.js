@@ -18,7 +18,6 @@ export function enPassant(currentPiecePlayed, piecePlayed, chessLetter, board) {
           end.y === previousEnd.y &&
           start.x === previousEnd.x
         ) {
-          delete board[piecePlayed.end];
           const caseId = document.querySelector(`#${piecePlayed.end}`);
           caseId.querySelector("img").remove();
           return true;
