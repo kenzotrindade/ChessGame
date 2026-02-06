@@ -19,7 +19,7 @@ export function dragAndDrop(board, rules) {
       const startCase = document.getElementById(data);
       const moovePiece = startCase.querySelector(".piece");
       const pieceHere = e.currentTarget.querySelector(".piece");
-      const legalMoove = rules.isLegalMoove(data, e.currentTarget.id, board);
+      const legalMoove = rules.isLegalMove(data, e.currentTarget.id, board);
       //const causesCheck = rules.inCheck(data, e.currentTarget.id, board);
       if (legalMoove /*&& !causesCheck*/) {
         if (pieceHere) {

@@ -1,18 +1,10 @@
-export function pawnLegalMoove(idStart, idEnd, start, end, board) {
+export function pawnLegalMove(idStart, idEnd, start, end, board) {
   const startPiece = board[idStart];
 
   const pieceHere = board[idEnd];
 
-  let mooveWhiteLimit = 1;
-  let mooveBlackLimit = -1;
-
-  /*for (let i = start.x + 1; i < end.x; i++) {
-    let id = chessLetter[7 - end.y] + i;
-    console.log(id);
-    const checkPieceBetween = board[id];
-    console.log(checkPieceBetween);
-    if (checkPieceBetween) return false;
-  }*/
+  let moveWhiteLimit = 1;
+  let moveBlackLimit = -1;
 
   if (start.y !== end.y && !pieceHere) {
     return false;
@@ -28,20 +20,20 @@ export function pawnLegalMoove(idStart, idEnd, start, end, board) {
     return false;
   }
   if (startPiece.color === "white" && start.x === 2) {
-    mooveWhiteLimit = 2;
+    moveWhiteLimit = 2;
   }
 
   if (startPiece.color === "black" && start.x === 7) {
-    mooveBlackLimit = -2;
+    moveBlackLimit = -2;
   }
 
   if (
-    (startPiece.color === "white" && end.x - start.x > mooveWhiteLimit) ||
+    (startPiece.color === "white" && end.x - start.x > moveWhiteLimit) ||
     (startPiece.color === "white" && end.x - start.x < 0)
   ) {
     return false;
   } else if (
-    (startPiece.color === "black" && end.x - start.x < mooveBlackLimit) ||
+    (startPiece.color === "black" && end.x - start.x < moveBlackLimit) ||
     (startPiece.color === "black" && end.x - start.x > 0)
   ) {
     return false;

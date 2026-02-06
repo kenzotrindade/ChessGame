@@ -1,31 +1,42 @@
-import { pawnLegalMoove } from "./controls/pawn.js";
-import { rookLegalMoove } from "./controls/rook.js";
-import { bishopLegalMoove } from "./controls/bishop.js";
-import { knightLegalMoove } from "./controls/knight.js";
-import { queenLegalMoove } from "./controls/queen.js";
-import { kingLegalMoove } from "./controls/king.js";
+import { pawnLegalMove } from "./controls/pawn.js";
+import { rookLegalMove } from "./controls/rook.js";
+import { bishopLegalMove } from "./controls/bishop.js";
+import { knightLegalMove } from "./controls/knight.js";
+import { queenLegalMove } from "./controls/queen.js";
+import { kingLegalMove } from "./controls/king.js";
 
 import { idToCoords } from "../components/calcCoords.js";
+import { enPassant } from "./enPassant.js";
 
 import PathClear from "./pathClear.js";
 
 export default class GlobalRules {
   constructor() {
-    this.piecePlayed = {};
+    this.piecePlayed = {
+      start: null,
+      end: null,
+      color: null,
+      type: null,
+    };
+
+    this.currentPiecePlayed = {};
     this.chessLetter = ["a", "b", "c", "d", "e", "f", "g", "h"];
   }
 
-  isLegalMoove(idStart, idEnd, board) {
+  isLegalMove(idStart, idEnd, board) {
     const startPiece = board[idStart];
     const endPiece = board[idEnd];
 
-    this.piecePlayed = {
+    this.currentPiecePlayed = {
       start: idStart,
       end: idEnd,
       color: board[idStart].color,
       type: board[idStart].type,
     };
 
+    /*console.log("pièce jouée : \n", this.currentPiecePlayed);
+    console.log("\npièce jouée précedemment : \n", this.piecePlayed);
+*/
     if (idStart === idEnd) {
       return false;
     }
@@ -58,31 +69,56 @@ export default class GlobalRules {
       board,
     );
 
+    console.log(start, end);
+
     if (pathClear.check) {
       if (startPiece.type === "pawn") {
-        return pawnLegalMoove(idStart, idEnd, start, end, board);
+        if (
+          enPassant(
+            this.currentPiecePlayed,
+            this.piecePlayed,
+            this.chessLetter,
+            board,
+          )
+        )
+          return true;
+        else if (pawnLegalMove(idStart, idEnd, start, end, board)) {
+          this.piecePlayed = this.currentPiecePlayed;
+        } else return false;
       }
 
       if (startPiece.type === "rook") {
-        return rookLegalMoove(start, end);
+        if (rookLegalMove(start, end)) {
+          this.piecePlayed = this.currentPiecePlayed;
+        } else return false;
       }
 
       if (startPiece.type === "bishop") {
-        return bishopLegalMoove(start, end, board);
+        if (bishopLegalMove(start, end, board)) {
+          this.piecePlayed = this.currentPiecePlayed;
+        } else return false;
       }
 
       if (startPiece.type === "knight") {
-        return knightLegalMoove(start, end);
+        if (knightLegalMove(start, end)) {
+          this.piecePlayed = this.currentPiecePlayed;
+        } else return false;
       }
 
       if (startPiece.type === "queen") {
-        return queenLegalMoove(start, end);
+        if (queenLegalMove(start, end)) {
+          this.piecePlayed = this.currentPiecePlayed;
+        } else return false;
       }
 
       if (startPiece.type === "king") {
-        return kingLegalMoove(start, end);
+        if (kingLegalMove(start, end)) {
+          this.piecePlayed = this.currentPiecePlayed;
+        } else return false;
       }
     } else return false;
+
+    this.piecePlayed = this.currentPiecePlayed;
 
     return true;
   }

@@ -60,7 +60,10 @@ export default class PathClear {
       } else {
         id = coordsToId(i, startPoint.y, this.idTab);
       }
-      if (this.board[id]) this.check = false;
+      if (this.board[id]) {
+        console.log(`they're a ${this.board[id].type} here!`);
+        this.check = false;
+      }
     }
   }
 
@@ -70,9 +73,11 @@ export default class PathClear {
     while (currentX != this.end.x && currentY != this.end.y) {
       currentX += dir[0];
       currentY += dir[1];
-      console.log(currentX, currentY);
       let id = coordsToId(currentX, currentY, this.idTab);
-      if (this.board[id] && id != this.idEnd) this.check = false;
+      if (this.board[id] && id != this.idEnd) {
+        console.log(`they're a ${this.board[id].type} here!`);
+        this.check = false;
+      }
     }
   }
 }
