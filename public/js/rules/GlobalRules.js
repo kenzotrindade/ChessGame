@@ -6,9 +6,10 @@ import { queenLegalMove } from "./controls/queen.js";
 import { kingLegalMove } from "./controls/king.js";
 
 import { idToCoords } from "../components/calcCoords.js";
-import { enPassant } from "./enPassant.js";
 
 import PathClear from "./pathClear.js";
+import { enPassant } from "./enPassant.js";
+import { castling } from "./castling.js";
 
 export default class GlobalRules {
   constructor() {
@@ -21,6 +22,7 @@ export default class GlobalRules {
 
     this.currentPiecePlayed = {};
     this.chessLetter = ["a", "b", "c", "d", "e", "f", "g", "h"];
+    this.castling = true;
   }
 
   isLegalMove(idStart, idEnd, board) {
@@ -71,7 +73,7 @@ export default class GlobalRules {
 
     console.log(start, end);
 
-    if (pathClear.check) {
+    if (pathClear.check && endPiece.type != "king") {
       if (startPiece.type === "pawn") {
         if (
           enPassant(
@@ -90,6 +92,7 @@ export default class GlobalRules {
       if (startPiece.type === "rook") {
         if (rookLegalMove(start, end)) {
           this.piecePlayed = this.currentPiecePlayed;
+          this.castling = false;
         } else return false;
       }
 
@@ -113,7 +116,10 @@ export default class GlobalRules {
 
       if (startPiece.type === "king") {
         if (kingLegalMove(start, end)) {
+          if (this.castling)
+            castling(this.piecePlayed, this.chessLetter, board);
           this.piecePlayed = this.currentPiecePlayed;
+          this.castling = false;
         } else return false;
       }
     } else return false;
