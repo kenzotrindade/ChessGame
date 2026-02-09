@@ -71,6 +71,10 @@ export default class GlobalRules {
 
     console.log(start, end);
 
+    if (endPiece && endPiece.type === "king") {
+      return false;
+    }
+
     if (pathClear.check) {
       if (startPiece.type === "pawn") {
         if (
