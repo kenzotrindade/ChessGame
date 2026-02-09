@@ -1,4 +1,4 @@
-export function queenLegalMoove(start, end) {
+export function queenLegalMove(start, end) {
   if (Math.abs(end.x - start.x) === Math.abs(end.y - start.y)) {
     return true;
   }

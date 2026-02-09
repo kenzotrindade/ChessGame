@@ -1,4 +1,4 @@
-export function kingLegalMoove(start, end) {
+export function kingLegalMove(start, end) {
   const mooveLimit = 1;
 
   if (

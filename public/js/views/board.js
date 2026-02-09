@@ -71,7 +71,7 @@ export default class BoardManager {
         this.chessBoard.appendChild(boardCase);
       }
     }
-    this._initPromotionUI(rules);
+    this.initPawnChoice(rules);
   }
 
   initPieces() {
@@ -88,7 +88,7 @@ export default class BoardManager {
     }
   }
 
-  _initPromotionUI(rules) {
+  initPawnChoice(rules) {
     this.pawnChoices.forEach((choice) => {
       const pieceChoiceImg = document.createElement("img");
       pieceChoiceImg.src = `assets/${choice.color}_${choice.type}.png`;
