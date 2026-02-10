@@ -1,10 +1,7 @@
-import { coordsToId } from "../components/calcCoords.js";
-import GlobalRules from "./GlobalRules.js";
-
 export function isSquareAttacked(targetId, attackerColor, board, rules) {
   for (let startId in board) {
     if (board[startId].color === attackerColor) {
-      if (rules.isLegalMove(startId, targetId, board)) {
+      if (rules.isLegalMove(startId, targetId, board, true)) {
         return true;
       }
     }
@@ -13,44 +10,32 @@ export function isSquareAttacked(targetId, attackerColor, board, rules) {
 }
 
 export function inCheck(idStart, idEnd, board, rules) {
-  const movingPiece = board[idStart];
-  const targetPiece = board[idEnd];
-  const myColor = movingPiece.color;
-  const enemyColor = myColor === "white" ? "black" : "white";
-
-  board[idEnd] = movingPiece;
-  delete board[idStart];
-
-  let kingId = "";
-  for (let id in board) {
-    if (board[id].type === "king" && board[id].color === myColor) {
-      kingId = id;
-      break;
-    }
+  const tempBoard = {};
+  for (let key in board) {
+    tempBoard[key] = { ...board[key] };
   }
 
-  const result = isSquareAttacked(kingId, enemyColor, board, rules);
+  const movingPiece = tempBoard[idStart];
+  if (!movingPiece) return false;
 
-  board[idStart] = movingPiece;
-  if (targetPiece) {
-    board[idEnd] = targetPiece;
-  } else {
-    delete board[idEnd];
-  }
+  tempBoard[idEnd] = movingPiece;
+  delete tempBoard[idStart];
 
-  return result;
+  const kingId = Object.keys(tempBoard).find(
+    (id) =>
+      tempBoard[id].type === "king" &&
+      tempBoard[id].color === movingPiece.color,
+  );
+
+  const enemyColor = movingPiece.color === "white" ? "black" : "white";
+  return isSquareAttacked(kingId, enemyColor, tempBoard, rules);
 }
 
 export function isCheckmate(color, board, rules, chessLetter) {
   const enemyColor = color === "white" ? "black" : "white";
-
-  let kingId = "";
-  for (let id in board) {
-    if (board[id].type === "king" && board[id].color === color) {
-      kingId = id;
-      break;
-    }
-  }
+  const kingId = Object.keys(board).find(
+    (id) => board[id].type === "king" && board[id].color === color,
+  );
 
   if (!isSquareAttacked(kingId, enemyColor, board, rules)) {
     return false;
@@ -61,13 +46,11 @@ export function isCheckmate(color, board, rules, chessLetter) {
   for (let startId of myPieces) {
     for (let l of chessLetter) {
       for (let n = 1; n <= 8; n++) {
-        let endId = l + n;
-
-        if (
-          rules.isLegalMove(startId, endId, board) &&
-          !inCheck(startId, endId, board, rules)
-        ) {
-          return false;
+        let endId = `${l}${n}`;
+        if (rules.isLegalMove(startId, endId, board, true)) {
+          if (!inCheck(startId, endId, board, rules)) {
+            return false;
+          }
         }
       }
     }

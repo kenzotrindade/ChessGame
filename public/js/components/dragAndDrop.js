@@ -1,37 +1,47 @@
-import { inCheck, isCheckmate, isSquareAttacked } from "../rules/checkMate.js";
+import { inCheck, isCheckmate } from "../rules/checkMate.js";
 
 export function dragAndDrop(board, rules) {
   const listPieces = document.querySelectorAll(".piece");
   const listCases = document.querySelectorAll(".clickable");
+  const chessLetter = ["a", "b", "c", "d", "e", "f", "g", "h"];
 
   listPieces.forEach((piece) => {
     piece.addEventListener("dragstart", (e) => {
-      let idParent = e.target.parentElement.id;
-      e.dataTransfer.setData("text", idParent);
+      e.dataTransfer.setData("text", e.target.parentElement.id);
     });
   });
 
   listCases.forEach((cases) => {
-    cases.addEventListener("dragover", (e) => {
-      e.preventDefault();
-    });
+    cases.addEventListener("dragover", (e) => e.preventDefault());
 
     cases.addEventListener("drop", (e) => {
       const data = e.dataTransfer.getData("text");
+      const targetId = e.currentTarget.id;
+      if (!data || !targetId) return;
+
       const startCase = document.getElementById(data);
-      const moovePiece = startCase.querySelector(".piece");
+      const movePiece = startCase.querySelector(".piece");
       const pieceHere = e.currentTarget.querySelector(".piece");
-      const legalMoove = rules.isLegalMove(data, e.currentTarget.id, board);
-      const causesCheck = legalMoove
-        ? inCheck(data, e.currentTarget.id, board, rules)
-        : true;
-      if (legalMoove && !causesCheck) {
-        if (pieceHere) {
-          pieceHere.remove();
-        }
-        board[e.currentTarget.id] = board[data];
+
+      console.log("Test Legal:", rules.isLegalMove(data, targetId, board));
+      console.log("Test Check:", inCheck(data, targetId, board, rules));
+      if (
+        rules.isLegalMove(data, targetId, board) &&
+        !inCheck(data, targetId, board, rules)
+      ) {
+        if (pieceHere) pieceHere.remove();
+
+        board[targetId] = board[data];
         delete board[data];
-        e.currentTarget.appendChild(moovePiece);
+        e.currentTarget.appendChild(movePiece);
+
+        const nextColor = board[targetId].color === "white" ? "black" : "white";
+        if (isCheckmate(nextColor, board, rules, chessLetter)) {
+          setTimeout(
+            () => alert(`Échec et Mat ! Victoire des ${board[targetId].color}`),
+            100,
+          );
+        }
       }
     });
   });
