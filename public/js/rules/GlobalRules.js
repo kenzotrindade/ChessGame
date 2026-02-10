@@ -19,7 +19,9 @@ export default class GlobalRules {
     this.castling = true;
   }
 
-  isLegalMove(idStart, idEnd, board, isSimulated = false) {
+  isLegalMove(idStart, idEnd, board, isSimulated) {
+    console.log("tests");
+
     const startPiece = board[idStart];
     const endPiece = board[idEnd];
 
@@ -48,20 +50,21 @@ export default class GlobalRules {
     };
 
     if (startPiece.type === "pawn") {
-      if (enPassant(moveAttempt, this.piecePlayed, this.chessLetter, board)) {
+      if (enPassant(moveAttempt, this.piecePlayed, this.chessLetter, board))
         legal = true;
-      } else {
+      else
         legal = pawnLegalMove(idStart, idEnd, start, end, board, isSimulated);
-      }
     } else if (startPiece.type === "rook") legal = rookLegalMove(start, end);
     else if (startPiece.type === "bishop") legal = bishopLegalMove(start, end);
     else if (startPiece.type === "knight") legal = knightLegalMove(start, end);
     else if (startPiece.type === "queen") legal = queenLegalMove(start, end);
-    else if (startPiece.type === "king") legal = kingLegalMove(start, end);
-
-    if (legal && !isSimulated) {
-      this.piecePlayed = moveAttempt;
+    else if (startPiece.type === "king") {
+      if (castling(this.currentPiecePlayed, this.chessLetter, board))
+        legal = true;
+      else legal = kingLegalMove(start, end);
     }
+
+    if (legal && !isSimulated) this.piecePlayed = moveAttempt;
 
     return legal;
   }

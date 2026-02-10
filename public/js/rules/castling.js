@@ -1,5 +1,3 @@
 import { idToCoords } from "../components/calcCoords.js";
 
-export function castling(currentPiecePlayed, chessLetter, board) {
-  console.log("test");
-}
+export function castling(currentPiecePlayed, chessLetter, board) {}

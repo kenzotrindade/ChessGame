@@ -25,8 +25,9 @@ export function dragAndDrop(board, rules) {
 
       console.log("Test Legal:", rules.isLegalMove(data, targetId, board));
       console.log("Test Check:", inCheck(data, targetId, board, rules));
+      console.log("\n\n");
       if (
-        rules.isLegalMove(data, targetId, board) &&
+        rules.isLegalMove(data, targetId, board, false) &&
         !inCheck(data, targetId, board, rules)
       ) {
         if (pieceHere) pieceHere.remove();
