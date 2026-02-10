@@ -1,3 +1,5 @@
+import { inCheck, isCheckmate, isSquareAttacked } from "../rules/checkMate.js";
+
 export function dragAndDrop(board, rules) {
   const listPieces = document.querySelectorAll(".piece");
   const listCases = document.querySelectorAll(".clickable");
@@ -20,8 +22,10 @@ export function dragAndDrop(board, rules) {
       const moovePiece = startCase.querySelector(".piece");
       const pieceHere = e.currentTarget.querySelector(".piece");
       const legalMoove = rules.isLegalMove(data, e.currentTarget.id, board);
-      //const causesCheck = rules.inCheck(data, e.currentTarget.id, board);
-      if (legalMoove /*&& !causesCheck*/) {
+      const causesCheck = legalMoove
+        ? inCheck(data, e.currentTarget.id, board, rules)
+        : true;
+      if (legalMoove && !causesCheck) {
         if (pieceHere) {
           pieceHere.remove();
         }
