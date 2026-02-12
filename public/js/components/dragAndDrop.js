@@ -1,7 +1,8 @@
+import Check from "../rules/checkMate.js";
+
 export function dragAndDrop(board, rules) {
   const listPieces = document.querySelectorAll(".piece");
   const listCases = document.querySelectorAll(".clickable");
-  const chessLetter = ["a", "b", "c", "d", "e", "f", "g", "h"];
 
   listPieces.forEach((piece) => {
     piece.addEventListener("dragstart", (e) => {
@@ -30,6 +31,7 @@ export function dragAndDrop(board, rules) {
         e.currentTarget.appendChild(movePiece);
 
         const nextColor = board[targetId].color === "white" ? "black" : "white";
+        rules.switchTurn();
       }
     });
   });
