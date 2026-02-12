@@ -1,7 +1,7 @@
 import { idToCoords } from "../components/calcCoords.js";
 
-export function enPassant(currentPiecePlayed, piecePlayed, chessLetter, board) {
-  if (piecePlayed.type === "pawn") {
+export function enPassant(currentPiecePlayed, piecePlayed, chessLetter, check) {
+  if (piecePlayed.type === "pawn" && !check) {
     const previousStart = idToCoords(piecePlayed.start, chessLetter);
     const previousEnd = idToCoords(piecePlayed.end, chessLetter);
     const start = idToCoords(currentPiecePlayed.start, chessLetter);

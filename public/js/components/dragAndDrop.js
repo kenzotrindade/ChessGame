@@ -1,5 +1,3 @@
-import { inCheck, isCheckmate } from "../rules/checkMate.js";
-
 export function dragAndDrop(board, rules) {
   const listPieces = document.querySelectorAll(".piece");
   const listCases = document.querySelectorAll(".clickable");
@@ -23,13 +21,8 @@ export function dragAndDrop(board, rules) {
       const movePiece = startCase.querySelector(".piece");
       const pieceHere = e.currentTarget.querySelector(".piece");
 
-      console.log("Test Legal:", rules.isLegalMove(data, targetId, board));
-      console.log("Test Check:", inCheck(data, targetId, board, rules));
       console.log("\n\n");
-      if (
-        rules.isLegalMove(data, targetId, board, false) &&
-        !inCheck(data, targetId, board, rules)
-      ) {
+      if (rules.isLegalMove(data, targetId, board)) {
         if (pieceHere) pieceHere.remove();
 
         board[targetId] = board[data];
@@ -37,12 +30,6 @@ export function dragAndDrop(board, rules) {
         e.currentTarget.appendChild(movePiece);
 
         const nextColor = board[targetId].color === "white" ? "black" : "white";
-        if (isCheckmate(nextColor, board, rules, chessLetter)) {
-          setTimeout(
-            () => alert(`Échec et Mat ! Victoire des ${board[targetId].color}`),
-            100,
-          );
-        }
       }
     });
   });

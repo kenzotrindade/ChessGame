@@ -1,11 +1,4 @@
-export function pawnLegalMove(
-  idStart,
-  idEnd,
-  start,
-  end,
-  board,
-  isSimulated = false,
-) {
+export function pawnLegalMove(idStart, idEnd, start, end, board) {
   const startPiece = board[idStart];
   const pieceHere = board[idEnd];
 
@@ -30,7 +23,7 @@ export function pawnLegalMove(
     if (end.x - start.x < moveBlackLimit || end.x - start.x >= 0) return false;
   }
 
-  if (!isSimulated && (end.x === 8 || end.x === 1)) {
+  if (end.x === 8 || end.x === 1) {
     const colorChoice = document.querySelector(
       `#pawnChoice${startPiece.color}`,
     );
