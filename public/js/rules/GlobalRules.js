@@ -43,29 +43,6 @@ export default class GlobalRules {
 
     let legal = this.pieceMove(idStart, idEnd, board, false);
 
-    /*
-    if (startPiece.type === "pawn") {
-      if (
-        enPassant(
-          this.currentPlayedPiece,
-          this.playedPiece,
-          this.chessLetter,
-          board,
-        )
-      )
-        legal = true;
-      else legal = pawnLegalMove(idStart, idEnd, start, end, board);
-    } else if (startPiece.type === "rook") legal = rookLegalMove(start, end);
-    else if (startPiece.type === "bishop") legal = bishopLegalMove(start, end);
-    else if (startPiece.type === "knight") legal = knightLegalMove(start, end);
-    else if (startPiece.type === "queen") legal = queenLegalMove(start, end);
-    else if (startPiece.type === "king") {
-      if (castling(this.currentPlayedPiece, this.chessLetter, board))
-        legal = true;
-      else legal = kingLegalMove(start, end);
-    }
-*/
-
     if (legal) this.playedPiece = this.currentPlayedPiece;
 
     return legal;
