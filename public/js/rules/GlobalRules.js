@@ -19,12 +19,19 @@ export default class GlobalRules {
     this.currentPlayedPiece = {};
     this.chessLetter = ["a", "b", "c", "d", "e", "f", "g", "h"];
     this.castling = true;
+
+    this.turn = "white";
+  }
+
+  switchTurn() {
+    this.turn = this.turn === "white" ? "black" : "white";
   }
 
   isLegalMove(idStart, idEnd, board) {
     const startPiece = board[idStart];
     const endPiece = board[idEnd];
 
+    if (!startPiece || startPiece.color !== this.turn) return false;
     if (!startPiece || idStart === idEnd) return false;
     if (endPiece && startPiece.color === endPiece.color) return false;
 
