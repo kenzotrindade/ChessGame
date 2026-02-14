@@ -23,7 +23,11 @@ export default class PathClear {
   }
 
   pathClear() {
-    if (this.board[this.idStart].type === "knight") return;
+    if (
+      this.board[this.idStart].type === "knight" ||
+      this.board[this.idStart].type === "king"
+    )
+      return;
 
     if (this.checkX === 0) {
       const abs = "y";

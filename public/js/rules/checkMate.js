@@ -1,14 +1,14 @@
 export default class Check {
   constructor(rules) {
     this.rules = rules;
-    this.color = this.rules.currentPlayedPiece.color;
-    this.opponentColor = this.color === "white" ? "black" : "white";
+    this.colorInCheck = null;
   }
 
   isSquareAttacked(targetId, board) {
     for (let startId in board) {
-      if (board[startId].color === this.opponentColor) {
+      if (board[startId].color != board[targetId].color) {
         if (this.rules.pieceMove(startId, targetId, board, true)) {
+          this.colorInCheck = board[targetId].color;
           return true;
         }
       }
@@ -16,7 +16,7 @@ export default class Check {
     return false;
   }
 
-  inCheck(idStart, idEnd, board) {
+  inCheck(idStart, idEnd, board, swap) {
     const tempBoard = {};
     for (let key in board) {
       tempBoard[key] = { ...board[key] };
@@ -25,38 +25,43 @@ export default class Check {
     const movingPiece = tempBoard[idStart];
     if (!movingPiece) return false;
 
+    let color = movingPiece.color;
+    if (swap) color = color === "white" ? "black" : "white";
+
     tempBoard[idEnd] = movingPiece;
     delete tempBoard[idStart];
 
     const kingId = Object.keys(tempBoard).find(
-      (id) =>
-        tempBoard[id].type === "king" &&
-        tempBoard[id].color === movingPiece.color,
+      (id) => tempBoard[id].type === "king" && tempBoard[id].color === color,
     );
+
+    if (!kingId) return false;
 
     return this.isSquareAttacked(kingId, tempBoard);
   }
 
-  isCheckmate(board) {
-    const enemyColor = color === "white" ? "black" : "white";
+  isCheckmate(board, nextColor) {
     const kingId = Object.keys(board).find(
-      (id) => board[id].type === "king" && board[id].color === color,
+      (id) => board[id].type === "king" && board[id].color === nextColor,
     );
 
-    if (!isSquareAttacked(kingId, enemyColor, board, rules)) {
+    if (!this.isSquareAttacked(kingId, board)) {
       return false;
     }
 
     const myPieces = Object.keys(board).filter(
-      (id) => board[id].color === color,
+      (id) => board[id].color === nextColor,
     );
 
     for (let startId of myPieces) {
-      for (let l of chessLetter) {
+      for (let l of this.rules.chessLetter) {
         for (let n = 1; n <= 8; n++) {
           let endId = `${l}${n}`;
-          if (rules.isLegalMove(startId, endId, board, true)) {
-            if (!inCheck(startId, endId, board, rules)) {
+          if (this.rules.pieceMove(startId, endId, board, true)) {
+            if (
+              !this.inCheck(startId, endId, board, false) &&
+              board[endId].color != nextColor
+            ) {
               return false;
             }
           }

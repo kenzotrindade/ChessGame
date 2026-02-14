@@ -23,15 +23,26 @@ export function dragAndDrop(board, rules) {
       const pieceHere = e.currentTarget.querySelector(".piece");
 
       console.log("\n\n");
+
       if (rules.isLegalMove(data, targetId, board)) {
         if (pieceHere) pieceHere.remove();
 
-        board[targetId] = board[data];
-        delete board[data];
-        e.currentTarget.appendChild(movePiece);
+        const check = new Check(rules);
 
-        const nextColor = board[targetId].color === "white" ? "black" : "white";
-        rules.switchTurn();
+        if (!check.inCheck(data, targetId, board, false)) {
+          board[targetId] = board[data];
+          delete board[data];
+          e.currentTarget.appendChild(movePiece);
+
+          const nextColor =
+            board[targetId].color === "white" ? "black" : "white";
+
+          if (check.isCheckmate(board, nextColor)) console.log("perdu");
+
+          rules.switchTurn();
+        } else if (check.isCheckmate(board, board[data].color))
+          alert("échec et mat");
+        else alert("Coup impossible");
       }
     });
   });

@@ -10,7 +10,6 @@ import { idToCoords } from "../components/calcCoords.js";
 import { enPassant } from "./enPassant.js";
 import { castling } from "./castling.js";
 
-import Check from "./checkMate.js";
 import PathClear from "./pathClear.js";
 
 export default class GlobalRules {
@@ -21,6 +20,8 @@ export default class GlobalRules {
     this.castling = true;
 
     this.turn = "white";
+
+    this.checkMate = false;
   }
 
   switchTurn() {
@@ -31,12 +32,17 @@ export default class GlobalRules {
     const startPiece = board[idStart];
     const endPiece = board[idEnd];
 
-    if (!startPiece || startPiece.color !== this.turn) return false;
+    if (!startPiece || startPiece.color !== this.turn) {
+      alert("Ce n'est pas votre tour");
+      return false;
+    }
     if (!startPiece || idStart === idEnd) return false;
     if (endPiece && startPiece.color === endPiece.color) return false;
 
     const start = idToCoords(idStart, this.chessLetter);
     const end = idToCoords(idEnd, this.chessLetter);
+
+    let legal = this.pieceMove(idStart, idEnd, board, false);
 
     this.currentPlayedPiece = {
       start: idStart,
@@ -44,11 +50,6 @@ export default class GlobalRules {
       color: board[idStart].color,
       type: board[idStart].type,
     };
-
-    const check = new Check(this);
-    if (check.inCheck(idStart, idEnd, board)) return false;
-
-    let legal = this.pieceMove(idStart, idEnd, board, false);
 
     if (legal) this.playedPiece = this.currentPlayedPiece;
 
@@ -72,6 +73,7 @@ export default class GlobalRules {
       this.chessLetter,
       board,
     );
+
     if (!pathClear.check) return false;
 
     if (startPiece.type === "pawn") {
@@ -84,7 +86,7 @@ export default class GlobalRules {
         )
       )
         legal = true;
-      else legal = pawnLegalMove(idStart, idEnd, start, end, board);
+      else legal = pawnLegalMove(idStart, idEnd, start, end, board, check);
     } else if (startPiece.type === "rook") legal = rookLegalMove(start, end);
     else if (startPiece.type === "bishop") legal = bishopLegalMove(start, end);
     else if (startPiece.type === "knight") legal = knightLegalMove(start, end);
