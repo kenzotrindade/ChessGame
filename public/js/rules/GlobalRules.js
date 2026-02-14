@@ -15,7 +15,12 @@ import PathClear from "./pathClear.js";
 export default class GlobalRules {
   constructor() {
     this.playedPiece = { start: null, end: null, color: null, type: null };
-    this.currentPlayedPiece = {};
+    this.currentPlayedPiece = {
+      start: null,
+      end: null,
+      color: null,
+      type: null,
+    };
     this.chessLetter = ["a", "b", "c", "d", "e", "f", "g", "h"];
     this.castling = true;
 
@@ -32,17 +37,15 @@ export default class GlobalRules {
     const startPiece = board[idStart];
     const endPiece = board[idEnd];
 
-    if (!startPiece || startPiece.color !== this.turn) {
+    /*if (!startPiece || startPiece.color !== this.turn) {
       alert("Ce n'est pas votre tour");
       return false;
-    }
+    }*/
     if (!startPiece || idStart === idEnd) return false;
     if (endPiece && startPiece.color === endPiece.color) return false;
 
     const start = idToCoords(idStart, this.chessLetter);
     const end = idToCoords(idEnd, this.chessLetter);
-
-    let legal = this.pieceMove(idStart, idEnd, board, false);
 
     this.currentPlayedPiece = {
       start: idStart,
@@ -51,7 +54,10 @@ export default class GlobalRules {
       type: board[idStart].type,
     };
 
-    if (legal) this.playedPiece = this.currentPlayedPiece;
+    let legal = this.pieceMove(idStart, idEnd, board, false);
+
+    console.log("pièce actuelle", this.currentPlayedPiece);
+    console.log("pièce précédente", this.playedPiece);
 
     return legal;
   }
@@ -92,8 +98,7 @@ export default class GlobalRules {
     else if (startPiece.type === "knight") legal = knightLegalMove(start, end);
     else if (startPiece.type === "queen") legal = queenLegalMove(start, end);
     else if (startPiece.type === "king") {
-      if (castling(this.currentPlayedPiece, this.chessLetter, board))
-        legal = true;
+      if (castling(this, board)) legal = true;
       else legal = kingLegalMove(start, end);
     }
     return legal;

@@ -39,6 +39,7 @@ export function dragAndDrop(board, rules) {
 
           if (check.isCheckmate(board, nextColor)) console.log("perdu");
 
+          rules.playedPiece = rules.currentPlayedPiece;
           rules.switchTurn();
         } else if (check.isCheckmate(board, board[data].color))
           alert("échec et mat");
