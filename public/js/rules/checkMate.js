@@ -37,6 +37,9 @@ export default class Check {
 
     if (!kingId) return false;
 
+    if (board[idEnd])
+      if (board[idEnd].color === board[idStart].color) return false;
+
     return this.isSquareAttacked(kingId, tempBoard);
   }
 
@@ -58,10 +61,7 @@ export default class Check {
         for (let n = 1; n <= 8; n++) {
           let endId = `${l}${n}`;
           if (this.rules.pieceMove(startId, endId, board, true)) {
-            if (
-              !this.inCheck(startId, endId, board, false) &&
-              board[endId].color != nextColor
-            ) {
+            if (!this.inCheck(startId, endId, board, false)) {
               return false;
             }
           }

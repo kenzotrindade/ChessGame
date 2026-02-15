@@ -53,6 +53,8 @@ export default class BoardManager {
 
     this.rules = rules;
 
+    this.checkColor = null;
+
     this.initBoard(rules);
     this.initPieces();
     dragAndDrop(this.grid, this.rules);

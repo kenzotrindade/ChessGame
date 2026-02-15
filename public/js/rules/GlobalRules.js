@@ -26,7 +26,7 @@ export default class GlobalRules {
 
     this.turn = "white";
 
-    this.checkMate = false;
+    this.checkState = false;
   }
 
   switchTurn() {
@@ -43,9 +43,6 @@ export default class GlobalRules {
     }*/
     if (!startPiece || idStart === idEnd) return false;
     if (endPiece && startPiece.color === endPiece.color) return false;
-
-    const start = idToCoords(idStart, this.chessLetter);
-    const end = idToCoords(idEnd, this.chessLetter);
 
     this.currentPlayedPiece = {
       start: idStart,
@@ -66,7 +63,6 @@ export default class GlobalRules {
     let legal = false;
 
     const startPiece = board[idStart];
-    const endPiece = board[idEnd];
 
     const start = idToCoords(idStart, this.chessLetter);
     const end = idToCoords(idEnd, this.chessLetter);
@@ -98,7 +94,8 @@ export default class GlobalRules {
     else if (startPiece.type === "knight") legal = knightLegalMove(start, end);
     else if (startPiece.type === "queen") legal = queenLegalMove(start, end);
     else if (startPiece.type === "king") {
-      if (castling(this, board)) legal = true;
+      if (castling(this, board, idStart, idEnd, start, end, check))
+        legal = true;
       else legal = kingLegalMove(start, end);
     }
     return legal;
