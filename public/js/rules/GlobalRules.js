@@ -10,7 +10,7 @@ import { idToCoords } from "../components/calcCoords.js";
 import { enPassant } from "./enPassant.js";
 import { castling } from "./castling.js";
 
-import PathClear from "./pathClear.js";
+import PathClear from "./PathClear.js";
 
 export default class GlobalRules {
   constructor() {
@@ -22,7 +22,12 @@ export default class GlobalRules {
       type: null,
     };
     this.chessLetter = ["a", "b", "c", "d", "e", "f", "g", "h"];
-    this.castling = true;
+    this.castling = {
+      white: true,
+      black: true,
+    };
+
+    this.listMove = [];
 
     this.turn = "white";
 
@@ -55,6 +60,14 @@ export default class GlobalRules {
 
     console.log("pièce actuelle", this.currentPlayedPiece);
     console.log("pièce précédente", this.playedPiece);
+
+    this.listMove.push({
+      idStart: idStart,
+      idEnd: idEnd,
+      type: board[idStart].type,
+      color: board[idStart].color,
+    });
+    console.log(this.listMove);
 
     return legal;
   }
@@ -94,9 +107,12 @@ export default class GlobalRules {
     else if (startPiece.type === "knight") legal = knightLegalMove(start, end);
     else if (startPiece.type === "queen") legal = queenLegalMove(start, end);
     else if (startPiece.type === "king") {
-      if (castling(this, board, idStart, idEnd, start, end, check))
+      if (castling(this, board, idStart, idEnd, start, end, check)) {
+        this.castling[board[idStart].color] = false;
         legal = true;
-      else legal = kingLegalMove(start, end);
+      } else {
+        legal = kingLegalMove(start, end);
+      }
     }
     return legal;
   }

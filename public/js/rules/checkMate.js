@@ -43,9 +43,9 @@ export default class Check {
     return this.isSquareAttacked(kingId, tempBoard);
   }
 
-  isCheckmate(board, nextColor) {
+  isCheckmate(board, color) {
     const kingId = Object.keys(board).find(
-      (id) => board[id].type === "king" && board[id].color === nextColor,
+      (id) => board[id].type === "king" && board[id].color === color,
     );
 
     if (!this.isSquareAttacked(kingId, board)) {
@@ -53,21 +53,27 @@ export default class Check {
     }
 
     const myPieces = Object.keys(board).filter(
-      (id) => board[id].color === nextColor,
+      (id) => board[id].color === color,
     );
+
+    let mat = true;
 
     for (let startId of myPieces) {
       for (let l of this.rules.chessLetter) {
         for (let n = 1; n <= 8; n++) {
           let endId = `${l}${n}`;
+          let endCase = false;
+          if (typeof board[endId]?.color !== "undefined")
+            endCase = board[endId].color === color ? true : false;
           if (this.rules.pieceMove(startId, endId, board, true)) {
-            if (!this.inCheck(startId, endId, board, false)) {
-              return false;
+            if (!this.inCheck(startId, endId, board, false) && !endCase) {
+              console.log(startId, endId);
+              mat = false;
             }
           }
         }
       }
     }
-    return true;
+    return mat;
   }
 }

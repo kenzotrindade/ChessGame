@@ -39,10 +39,13 @@ export function dragAndDrop(board, rules) {
 
           rules.playedPiece = rules.currentPlayedPiece;
 
+          if (check.isCheckmate(board, nextColor)) {
+            console.log(rules.listMove);
+            alert("échec et mat");
+          }
+
           rules.switchTurn();
-        } else if (check.isCheckmate(board, board[data].color))
-          alert("échec et mat");
-        else alert("Coup impossible");
+        } else alert("Coup impossible");
       }
     });
   });
