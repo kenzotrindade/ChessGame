@@ -37,6 +37,17 @@ export function castling(rules, board, idStart, idEnd, start, end, verif) {
     const line = board[idStart].color === "white" ? 1 : 8;
     const column = count[0] < count[1] ? "d" : "f";
     const towerIndex = count[0] < count[1] ? 0 : 1;
+    const sens =
+      towerIndex === 0
+        ? [towersCoord[towerIndex], start]
+        : [start, towersCoord[towerIndex]];
+
+    for (let i = sens[0].y + 1; i < sens[1].y - 1; i++) {
+      let id = coordsToId(sens[0].x, i, rules.chessLetter);
+      if (board[id]) {
+        return false;
+      }
+    }
 
     const newCase = `${column}${line}`;
     const lastCase = document.querySelector(`#${towersId[towerIndex]}`);
