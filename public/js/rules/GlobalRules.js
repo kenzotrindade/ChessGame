@@ -10,7 +10,7 @@ import { idToCoords } from "../components/calcCoords.js";
 import { enPassant } from "./enPassant.js";
 import { castling } from "./castling.js";
 
-import PathClear from "./PathClear.js";
+import PathClear from "./pathClear.js";
 
 export default class GlobalRules {
   constructor() {
