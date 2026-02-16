@@ -10,7 +10,7 @@ export function castling(rules, board, idStart, idEnd, start, end, verif) {
 
   const check = new Check(rules);
   if (check.isSquareAttacked(idStart, board)) {
-    alert("vous êtes en échec");
+    console.log("vous êtes en échec");
     return false;
   }
 

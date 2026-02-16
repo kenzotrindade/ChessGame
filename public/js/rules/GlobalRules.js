@@ -10,7 +10,7 @@ import { idToCoords } from "../components/calcCoords.js";
 import { enPassant } from "./enPassant.js";
 import { castling } from "./castling.js";
 
-import PathClear from "./PathClear.js";
+import PathClear from "./pathClear.js";
 
 export default class GlobalRules {
   constructor() {
@@ -43,9 +43,10 @@ export default class GlobalRules {
     const endPiece = board[idEnd];
 
     if (!startPiece || startPiece.color !== this.turn) {
-      alert("Ce n'est pas votre tour");
+      console.log("Ce n'est pas votre tour");
       return false;
     }
+
     if (!startPiece || idStart === idEnd) return false;
     if (endPiece && startPiece.color === endPiece.color) return false;
 
