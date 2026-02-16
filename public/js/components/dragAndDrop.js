@@ -41,11 +41,11 @@ export function dragAndDrop(board, rules) {
 
           if (check.isCheckmate(board, nextColor)) {
             console.log(rules.listMove);
-            alert("échec et mat");
+            console.log("échec et mat");
           }
 
           rules.switchTurn();
-        } else alert("Coup impossible");
+        } else console.log("Coup impossible");
       }
     });
   });

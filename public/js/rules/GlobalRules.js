@@ -42,10 +42,11 @@ export default class GlobalRules {
     const startPiece = board[idStart];
     const endPiece = board[idEnd];
 
-    /*if (!startPiece || startPiece.color !== this.turn) {
-      alert("Ce n'est pas votre tour");
+    if (!startPiece || startPiece.color !== this.turn) {
+      console.log("Ce n'est pas votre tour");
       return false;
-    }*/
+    }
+
     if (!startPiece || idStart === idEnd) return false;
     if (endPiece && startPiece.color === endPiece.color) return false;
 
