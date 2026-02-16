@@ -1,6 +1,6 @@
 <div align="center">
 
-# ♟️ ChessGame - Real-Time Multiplayer
+# ♟️ ChessGame - Local Game
 
 ![JavaScript](https://img.shields.io/badge/Language-JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
 ![Node.js](https://img.shields.io/badge/Backend-Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white)
