@@ -50,7 +50,7 @@ The backend handles active game sessions and relays player moves instantly using
 
 1. **Clone the repository:**
    ```bash
-   git clone [https://github.com/kenzotrindade/ChessGame.git](https://github.com/kenzotrindade/ChessGame.git)
+   git clone https://github.com/kenzotrindade/ChessGame.git
 2. **Install dependencies:**
    ```bash
    npm install
