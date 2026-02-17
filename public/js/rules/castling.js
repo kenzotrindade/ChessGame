@@ -49,6 +49,17 @@ export function castling(rules, board, idStart, idEnd, start, end, verif) {
       }
     }
 
+    for (let i in rules.listMove) {
+      if (
+        rules.listMove[i].idStart === towersId[towerIndex] ||
+        rules.listMove[i].idStart === idStart
+      ) {
+        console.log(rules.listMove[i].idStart, "a déjà bougé");
+        return false;
+      }
+      console.log(rules.listMove[i].idStart);
+    }
+
     const newCase = `${column}${line}`;
     const lastCase = document.querySelector(`#${towersId[towerIndex]}`);
     const movePiece = lastCase.querySelector(".piece");

@@ -42,10 +42,10 @@ export default class GlobalRules {
     const startPiece = board[idStart];
     const endPiece = board[idEnd];
 
-    if (!startPiece || startPiece.color !== this.turn) {
+    /*if (!startPiece || startPiece.color !== this.turn) {
       console.log("Ce n'est pas votre tour");
       return false;
-    }
+    }*/
 
     if (!startPiece || idStart === idEnd) return false;
     if (endPiece && startPiece.color === endPiece.color) return false;
@@ -62,12 +62,14 @@ export default class GlobalRules {
     console.log("pièce actuelle", this.currentPlayedPiece);
     console.log("pièce précédente", this.playedPiece);
 
-    this.listMove.push({
-      idStart: idStart,
-      idEnd: idEnd,
-      type: board[idStart].type,
-      color: board[idStart].color,
-    });
+    if (legal) {
+      this.listMove.push({
+        idStart: idStart,
+        idEnd: idEnd,
+        type: board[idStart].type,
+        color: board[idStart].color,
+      });
+    }
     console.log(this.listMove);
 
     return legal;

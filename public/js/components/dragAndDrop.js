@@ -40,7 +40,6 @@ export function dragAndDrop(board, rules) {
           rules.playedPiece = rules.currentPlayedPiece;
 
           if (check.isCheckmate(board, nextColor)) {
-            console.log(rules.listMove);
             console.log("échec et mat");
           }
 
