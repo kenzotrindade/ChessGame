@@ -5,10 +5,9 @@
 ![JavaScript](https://img.shields.io/badge/Language-JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
 ![Node.js](https://img.shields.io/badge/Backend-Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white)
 ![Express](https://img.shields.io/badge/Framework-Express-000000?style=for-the-badge&logo=express&logoColor=white)
-![Socket.io](https://img.shields.io/badge/RealTime-Socket.io-010101?style=for-the-badge&logo=socket.dot.io&logoColor=white)
 
 <p>
-  <strong>A real-time local Chess engine built with Node.js and WebSockets.</strong><br>
+  <strong>A real-time local Chess engine built with Node.js</strong><br>
   Challenge your friends online with instant move synchronization and a clean web interface.
 </p>
 
@@ -19,8 +18,6 @@
 ## 📋 About The Project
 
 **ChessGame** is a web-based local application that brings the classic game of chess to the browser.
-
-The backend handles active game sessions and relays player moves instantly using WebSockets, ensuring both boards remain perfectly in sync throughout the match.
 
 ---
 
